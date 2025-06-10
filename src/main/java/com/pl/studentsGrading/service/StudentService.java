@@ -1,5 +1,6 @@
 package com.pl.studentsGrading.service;
 
+import com.pl.studentsGrading.exception.IdNotNullException;
 import com.pl.studentsGrading.exception.StudentNotFoundException;
 import com.pl.studentsGrading.model.Student;
 import com.pl.studentsGrading.repository.StudentRepository;
@@ -26,7 +27,7 @@ public class StudentService {
 
     public Student createStudent(Student student) {
         if (student.getId() != null) {
-            throw new IllegalArgumentException("ID must be null");
+            throw new IdNotNullException(student.getId());
         }
         return studentRepository.save(student);
     }

@@ -24,6 +24,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IdNotNullException.class)
+    public ResponseEntity<ErrorResponse> handleIdNotNull(IdNotNullException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = ex.getBindingResult()
@@ -31,12 +41,12 @@ public class GlobalExceptionHandler {
                 .stream()
                 .collect(Collectors.toMap(
                         FieldError::getField,
-                        error -> error.getDefaultMessage() != null ? error.getDefaultMessage() : "Błąd walidacji"
+                        error -> error.getDefaultMessage() != null ? error.getDefaultMessage() : "Validation error"
                 ));
         
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                "Błędy walidacji",
+                "Validation errors",
                 LocalDateTime.now(),
                 errors
         );

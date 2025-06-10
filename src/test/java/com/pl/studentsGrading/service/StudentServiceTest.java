@@ -1,5 +1,6 @@
 package com.pl.studentsGrading.service;
 
+import com.pl.studentsGrading.exception.IdNotNullException;
 import com.pl.studentsGrading.exception.StudentNotFoundException;
 import com.pl.studentsGrading.model.Student;
 import com.pl.studentsGrading.repository.StudentRepository;
@@ -106,8 +107,8 @@ class StudentServiceTest {
 
         // when/then
         assertThatThrownBy(() -> studentService.createStudent(invalidStudent))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("ID must be null");
+                .isInstanceOf(IdNotNullException.class)
+                .hasMessage("Id must be null but is: " + invalidStudent.getId());
         
         verify(studentRepository, never()).save(any());
     }
